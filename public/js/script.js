@@ -173,7 +173,7 @@ stopVideo.addEventListener("click", () => {
 });
 
 inviteButton.addEventListener("click", (e) => {
-  // prompt("Copy this code and share", ROOM_ID);
+  prompt("Copy this code and share", ROOM_ID);
   socket.emit('random');
 });
 
