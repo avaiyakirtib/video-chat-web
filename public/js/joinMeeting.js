@@ -24,15 +24,15 @@ const user = prompt("Enter your name");
 
 var peer = new Peer({
   // in localhost
-  host: "127.0.0.1",
-  port: 3030,
-  path: "/peerjs",
+  // host: "127.0.0.1",
+  // port: 3030,
+  // path: "/peerjs",
 
   //in live
-  // host: "",
-  // secure: true, // Use true for HTTPS
-  // port: 443,
-  // path: "/peerjs",
+  host: "https://video-chat-web.onrender.com",
+  secure: true, // Use true for HTTPS
+  port: 443,
+  path: "/peerjs",
 
   debug: 3,
 });
