@@ -29,7 +29,7 @@ var peer = new Peer({
   // path: "/peerjs",
 
   //in live
-  host: "https://video-chat-web.onrender.com",
+  host: "video-chat-web.onrender.com",
   secure: true, // Use true for HTTPS
   port: 443,
   path: "/peerjs",

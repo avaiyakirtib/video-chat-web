@@ -52,7 +52,7 @@ app.get("/join-meeting", (req, res) => {
 //   });
 // });
 
-const meetingIo = io.of("/meeting");
+const meetingIo = io.of("/meeting")
 
 meetingIo.on("connection", (socket) => {
   // console.log('User connected');
@@ -64,27 +64,28 @@ meetingIo.on("connection", (socket) => {
   // socket.on("disconnect",()=>{
   //   console.log('user disconected')
   // });
+  console.log("User connected");
   socket.on("join-room", (roomId, userId, userName) => {
-    console.log("join a room", roomId);
+    console.log(userId + " join a room "+ roomId)
     socket.join(roomId);
-    socket.to(roomId).emit("user-connected", userId);
+    setTimeout(() => {
+      socket.to(roomId).emit("user-connected", userId);
+    }, 1000);
     socket.on("message", (message) => {
-      console.log("message", message);
-      console.log('Username', userName)
+      console.log("message is ", message);
       meetingIo.to(roomId).emit("createMessage", message, userName);
     });
-
     socket.on("leave-room", (roomID) => {
-      console.log("leave room", roomID);
+      console.log('leave room ', roomID)
       socket.leave(roomID);
       meetingIo.to(roomID).emit("user-disconnected", userId);
     });
     socket.on("disconnect", () => {
-      console.log("User disconnected");
+      console.log("User disconnected ", userId);
       socket.leave(roomId);
       meetingIo.to(roomId).emit("user-disconnected", userId);
     });
   });
 });
 
-server.listen(3030);
+server.listen(process.env.PORT || 3030);

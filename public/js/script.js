@@ -28,7 +28,7 @@ var peer = new Peer({
   // path: "/peerjs",
 
   //in live
-  host: "https://video-chat-web.onrender.com",
+  host: "video-chat-web.onrender.com",
   secure: true, // Use true for HTTPS
   port: 443,
   path: "/peerjs",
@@ -72,9 +72,9 @@ const connectToNewUser = (userId, stream) => {
   call.on("stream", (userVideoStream) => {
     addVideoStream(video, userVideoStream);
   });
-  call.on("close", () => {
+  call.on('close',()=>{
     video.remove();
-  });
+  })
   peers[userId] = call;
 };
 
@@ -92,8 +92,8 @@ socket.on("user-disconnected", (userId) => {
 
 peer.on("open", (id) => {
   // localStorage.setItem("userId", id);
-  console.log("my id is ", id);
-  socket.emit("join-room", ROOM_ID, id, user);
+  console.log('my id is ',id)
+  socket.emit("join-room", ROOM_ID,id,user);
 });
 
 const addVideoStream = (video, stream) => {
@@ -141,15 +141,15 @@ muteButton.addEventListener("click", () => {
   }
 });
 
-function getEndCall() {
-  socket.emit("leave-room", ROOM_ID);
+function getEndCall(){
+  socket.emit("leave-room",ROOM_ID);
   const parentElement = myVideo.parentElement;
   const childElements = parentElement.children;
   // console.log(parentElement);
   // console.log(allVideo);
   // console.log(peer.id);
   // peer.on('close',()=>{
-
+    
   // })
   peer.destroy();
   for (let i = childElements.length - 1; i > 0; i--) {
@@ -173,11 +173,14 @@ stopVideo.addEventListener("click", () => {
 });
 
 inviteButton.addEventListener("click", (e) => {
-  prompt("Copy this code and share", ROOM_ID);
+  prompt(
+    "Copy this code and share",
+    ROOM_ID
+  );
 });
 
 socket.on("createMessage", (message, userName) => {
-  console.log("admin messages");
+  console.log('admin messages');
   messages.innerHTML =
     messages.innerHTML +
     `<div class="message">
