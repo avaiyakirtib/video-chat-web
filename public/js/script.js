@@ -58,7 +58,7 @@ navigator.mediaDevices
       });
     });
 
-    socket.on("random-user", (userId) => {
+    socket.on("user-connected", (userId) => {
       connectToNewUser(userId, stream);
     });
   });
@@ -174,7 +174,6 @@ stopVideo.addEventListener("click", () => {
 
 inviteButton.addEventListener("click", (e) => {
   prompt("Copy this code and share", ROOM_ID);
-  socket.emit('random');
 });
 
 socket.on("createMessage", (message, userName) => {

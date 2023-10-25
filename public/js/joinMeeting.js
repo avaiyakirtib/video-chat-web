@@ -94,7 +94,7 @@ socket.on("user-disconnected", (userId) => {
 peer.on("open", (id) => {
   // localStorage.setItem("userId", id);
   console.log('my id is ',id)
-  socket.emit("user-connect", id);
+  socket.emit("join-room", ROOM_ID, id, user);
 });
 
 const addVideoStream = (video, stream) => {
