@@ -19,9 +19,6 @@ showChat.addEventListener("click", () => {
   document.querySelector(".header__back").style.display = "block";
 });
 
-const ROOM_ID = prompt('Enter your code');
-const user = prompt("Enter your name");
-
 var peer = new Peer({
   // in localhost
   // host: "127.0.0.1",
@@ -46,6 +43,7 @@ navigator.mediaDevices
   })
   .then((stream) => {
     myVideoStream = stream;
+      socket.emit("random");
     addVideoStream(myVideo, stream);
 
     peer.on("call", (call) => {
@@ -59,10 +57,15 @@ navigator.mediaDevices
       });
     });
 
-    socket.on("user-connected", (userId) => {
+    socket.on("random-user", (userId) => {
+      console.log('Random userId',userId);
       connectToNewUser(userId, stream);
     });
   });
+
+  // socket.on('random-user',(userId)=>{
+  //   console.log('userid', userId)
+  // })
 
 const connectToNewUser = (userId, stream) => {
   console.log("I call someone" + userId);
@@ -71,6 +74,7 @@ const connectToNewUser = (userId, stream) => {
   // localStorage.setItem("userId", userId);
   // video.id = userId
   call.on("stream", (userVideoStream) => {
+    console.log('i call someone stream')
     addVideoStream(video, userVideoStream);
   });
   call.on("close", () => {
@@ -81,7 +85,7 @@ const connectToNewUser = (userId, stream) => {
 
 socket.on("user-disconnected", (userId) => {
   console.log("cut the call", userId);
-//   if (peers[userId]) peers[userId].close();
+  //   if (peers[userId]) peers[userId].close();
 
   // const parentElement = myVideo.parentElement; // Get the parent element (e.g., a div, body, or any other containing element)
   // if (parentElement) {
@@ -93,11 +97,12 @@ socket.on("user-disconnected", (userId) => {
 
 peer.on("open", (id) => {
   // localStorage.setItem("userId", id);
-  console.log('my id is ',id)
-  socket.emit("join-room", ROOM_ID, id, user);
+  console.log("my id is ", id);
+  socket.emit("user-connect", id);
 });
 
 const addVideoStream = (video, stream) => {
+  console.log('add video stream');
   video.srcObject = stream;
   video.addEventListener("loadedmetadata", () => {
     video.play();
@@ -143,14 +148,14 @@ muteButton.addEventListener("click", () => {
 });
 
 function getEndCall() {
-    const parentElement = myVideo.parentElement;
-    const childElements = parentElement.children;
-    // console.log(parentElement);
-    // console.log(allVideo);
-    // console.log(peer.id);
-    socket.emit("leave-room",ROOM_ID);  
-    // peer.close();
-    peer.destroy();
+  const parentElement = myVideo.parentElement;
+  const childElements = parentElement.children;
+  // console.log(parentElement);
+  // console.log(allVideo);
+  // console.log(peer.id);
+  socket.emit("leave-room", ROOM_ID);
+  // peer.close();
+  peer.destroy();
   for (let i = childElements.length - 1; i > 0; i--) {
     parentElement.removeChild(childElements[i]);
   }
@@ -172,7 +177,7 @@ stopVideo.addEventListener("click", () => {
 });
 
 socket.on("createMessage", (message, userName) => {
-    console.log('this is client')
+  console.log("this is client");
   messages.innerHTML =
     messages.innerHTML +
     `<div class="message">
