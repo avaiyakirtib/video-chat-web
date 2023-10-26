@@ -128,7 +128,7 @@ text.addEventListener("keydown", (e) => {
   }
 });
 
-const inviteButton = document.querySelector("#inviteButton");
+const randomRetryButton = document.querySelector("#randomRetry");
 const muteButton = document.querySelector("#muteButton");
 const stopVideo = document.querySelector("#stopVideo");
 const allVideo = document.getElementsByTagName("video");
@@ -145,6 +145,10 @@ muteButton.addEventListener("click", () => {
     muteButton.classList.toggle("background__red");
     muteButton.innerHTML = html;
   }
+});
+
+randomRetryButton.addEventListener("click", (e) => {
+  socket.emit("random");
 });
 
 function getEndCall() {
